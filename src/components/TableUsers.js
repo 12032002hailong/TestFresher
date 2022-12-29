@@ -13,26 +13,10 @@ const TableUsers = (props) => {
 
     const getUsers = async () => {
         let res = await fetchAllUser();
-        if (res && res.data && res.data.data) {
-            setlistUsers(res.data.data)
+        if (res && res.data) {
+            setlistUsers(res.data)
         }
     }
-
-    // avatar
-    // :
-    // "https://reqres.in/img/faces/7-image.jpg"
-    // email
-    // :
-    // "michael.lawson@reqres.in"
-    // first_name
-    // :
-    // "Michael"
-    // id
-    // :
-    // 7
-    // last_name
-    // :
-    // "Lawson"
 
     console.log(">>> check listUserss", listUsers);
     return (
