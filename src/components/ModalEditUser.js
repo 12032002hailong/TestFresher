@@ -2,33 +2,30 @@ import { Button, Modal } from "react-bootstrap"
 import { useState } from 'react';
 import { postCreateUser } from "../services/UserServices";
 import { ToastContainer, toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 
-const ModalAddNew = (props) => {
+const ModalEditUser = (props) => {
 
-    const { handleClose, show, handleUpdateTable } = props;
+    const { handleClose, show, dataUserEdit } = props;
     const [name, setName] = useState("");
     const [job, setJob] = useState("");
 
+    const handleEditUser = () => {
 
-    const handleSaveuser = async () => {
-        let res = await postCreateUser(name, job);
-        console.log(">>>check res :", res);
-        if (res && res.id) {
-            handleClose();
-            setJob('');
-            setName('');
-            toast.success("A user is create succeed!")
-            handleUpdateTable({ first_name: name, id: res.id });
-            //success
-        } else {
-            //error
-        }
     }
+
+    useEffect(() => {
+        if (show) {
+            setName(dataUserEdit.first_name)
+        }
+    }, [dataUserEdit])
+
+    console.log(">>>check props", dataUserEdit);
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Add New User</Modal.Title>
+                <Modal.Title>Edit A User</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="body-add-new">
@@ -54,12 +51,12 @@ const ModalAddNew = (props) => {
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={() => handleSaveuser()}>
-                    Save Changes
+                <Button variant="primary" onClick={() => handleEditUser()}>
+                    Confirm
                 </Button>
             </Modal.Footer>
         </Modal>
     )
 }
 
-export default ModalAddNew;
+export default ModalEditUser;
