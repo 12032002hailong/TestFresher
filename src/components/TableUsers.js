@@ -5,6 +5,7 @@ import { fetchAllUser } from "../services/UserServices";
 import ReactPaginate from 'react-paginate';
 import ModalAddNew from './ModalAddNew';
 import ModalEditUser from "./ModalEditUser";
+import ModalConfirm from "./ModalConfirm";
 import _ from "lodash";
 
 const TableUsers = (props) => {
@@ -17,9 +18,14 @@ const TableUsers = (props) => {
     const [isShowModalEdit, setIsShowModalEdit] = useState(false);
     const [dataUserEdit, setDataUserEdit] = useState([]);
 
+    const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+
+    const [dataUserDelete, setDataUserDelete] = useState({});
+
     const handleClose = () => {
         setIsShowModalAddNew(false);
         setIsShowModalEdit(false)
+        setIsShowModalDelete(false)
     }
 
     const handleUpdateTable = (user) => {
@@ -55,7 +61,10 @@ const TableUsers = (props) => {
         setIsShowModalEdit(true);
     }
 
-
+    const handleDeleteUser = (user) => {
+        setIsShowModalDelete(true)
+        setDataUserDelete(user)
+    }
 
     return (<>
         <div className='my-3 add-new'>
@@ -84,7 +93,9 @@ const TableUsers = (props) => {
                                     <button className="btn btn-warning mx-3"
                                         onClick={() => handleEdituser(item)}
                                     >Edit</button>
-                                    <button className="btn btn-danger">Delete</button>
+                                    <button className="btn btn-danger"
+                                        onClick={() => handleDeleteUser(item)}
+                                    >Delete</button>
                                 </td>
                             </tr>
                         )
@@ -123,6 +134,12 @@ const TableUsers = (props) => {
                 handleClose={handleClose}
                 handleUpdateTable={handleUpdateTable}
                 handleEditUserFromModal={handleEditUserFromModal}
+            />
+            <ModalConfirm
+                show={isShowModalDelete}
+                handleClose={handleClose}
+                dataUserDelete={dataUserDelete}
+
             />
         </div>
     </>

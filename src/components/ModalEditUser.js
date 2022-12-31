@@ -33,7 +33,12 @@ const ModalEditUser = (props) => {
     }, [dataUserEdit])
 
     return (
-        <Modal show={show} onHide={handleClose}>
+        <Modal
+            show={show}
+            onHide={handleClose}
+            backdrop="static"
+            keyboard={false}
+        >
             <Modal.Header closeButton>
                 <Modal.Title>Edit A User</Modal.Title>
             </Modal.Header>
