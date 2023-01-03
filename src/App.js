@@ -3,7 +3,7 @@ import Header from './components/Header';
 
 import TableUsers from './components/TableUsers';
 import Container from 'react-bootstrap/Container';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
 

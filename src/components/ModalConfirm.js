@@ -1,13 +1,22 @@
 import { Button, Modal } from "react-bootstrap"
-import App from './../App';
-
+import { deleteUser } from '../services/UserServices';
+import { toast } from 'react-toastify';
 const ModalConfirm = (props) => {
 
-    const { handleClose, show, dataUserDelete } = props;
+    const { handleClose, show, dataUserDelete, handleDeleteUserFromModal } = props;
 
-    const confirmDelete = () => {
-
+    const confirmDelete = async () => {
+        let res = deleteUser(dataUserDelete.id);
+        if (res) {
+            toast.success("Delete user succeed!");
+            handleClose();
+            handleDeleteUserFromModal(dataUserDelete);
+        } else {
+            toast.error("error delete user")
+        }
+        console.log(">>check res.status", res);
     }
+
 
     return (
         <Modal
@@ -35,7 +44,7 @@ const ModalConfirm = (props) => {
                     Close
                 </Button>
                 <Button variant="primary" onClick={() => confirmDelete()}>
-                    Save Changes
+                    Confirm
                 </Button>
             </Modal.Footer>
         </Modal>
