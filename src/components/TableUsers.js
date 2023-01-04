@@ -28,6 +28,7 @@ const TableUsers = (props) => {
     const [sortField, setSortField] = useState("id");
 
     // const [keyword, setkeyword] = useState("");
+    const [dataExport, setDataExport] = useState([]);
 
     const handleClose = () => {
         setIsShowModalAddNew(false);
@@ -105,6 +106,22 @@ const TableUsers = (props) => {
         ["Yezzi", "Min l3b", "ymin@cocococo.com"]
     ];
 
+    const getUsersExport = (event, done) => {
+        let result = [];
+        if (listUsers && listUsers.length > 0) {
+            result.push(["ID", "First name", "Last name", "Email"]);
+            listUsers.map((item, index) => {
+                let arr = [];
+                arr[0] = item.id;
+                arr[1] = item.first_name;
+                arr[2] = item.last_name;
+                arr[3] = item.email;
+                result.push(arr);
+            })
+            setDataExport(result);
+            // done();
+        }
+    }
     return (<>
         <div className='my-3 add-new'>
             <span> <b>List Users :</b></span>
@@ -116,7 +133,9 @@ const TableUsers = (props) => {
                 <CSVLink
                     filename={"users.csv"}
                     className="btn btn-primary"
-                    data={csvData}>
+                    data={dataExport}
+                    asyncOnclick={true}
+                    onClick={getUsersExport}>
                     <i className="fa-solid fa-file-arrow-down"></i> Export</CSVLink>
                 {/* <CSVDownload data={csvData} target="_black" /> */}
 
