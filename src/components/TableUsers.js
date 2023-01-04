@@ -9,6 +9,8 @@ import ModalConfirm from "./ModalConfirm";
 import _, { debounce } from "lodash";
 import './TableUsers.scss';
 import { CSVLink, CSVDownload } from "react-csv";
+import Papa from "papaparse";
+import { toast } from "react-toastify";
 
 const TableUsers = (props) => {
 
@@ -122,6 +124,52 @@ const TableUsers = (props) => {
             // done();
         }
     }
+
+    const hanelImportCSV = (event) => {
+        if (event.target && event.target.files && event.target.files[0]) {
+            let file = event.target.files[0];
+
+            if (file.type !== "text/csv") {
+                toast.error("Only accept csv files...")
+                return;
+            }
+            Papa.parse(file, {
+                // header: true,
+                complete: function (results) {
+                    let rawCSV = results.data;
+                    if (rawCSV.length > 0) {
+                        if (rawCSV[0] && rawCSV[0].length === 4) {
+                            if (rawCSV[0][0] !== "ID"
+                                || rawCSV[0][1] !== "First name"
+                                || rawCSV[0][2] !== "Last name"
+                                || rawCSV[0][3] !== "Email"
+                            ) {
+                                toast.error("Wrong format Header CSV file!");
+                            } else {
+                                let result = [];
+                                rawCSV.map((item, index) => {
+                                    if (index > 0 && item.length === 4) {
+                                        let obj = {};
+                                        obj.id = item[0]
+                                        obj.first_name = item[1]
+                                        obj.last_name = item[2]
+                                        obj.email = item[3]
+                                        result.push(obj);
+                                    }
+                                })
+                                setlistUsers(result);
+                            }
+                        } else {
+                            toast.error("Wrong format CSV file!")
+                        }
+                    } else {
+                        toast.error("Not found data on csv file~")
+                    }
+                }
+            })
+        }
+    }
+
     return (<>
         <div className='my-3 add-new'>
             <span> <b>List Users :</b></span>
@@ -129,7 +177,9 @@ const TableUsers = (props) => {
                 <label htmlFor="test" className="btn btn-warning">
                     <i className="fa-solid fa-file-import"></i> Import
                 </label>
-                <input id="test" type="file" hidden />
+                <input id="test" type="file" hidden
+                    onChange={(event) => hanelImportCSV(event)}
+                />
                 <CSVLink
                     filename={"users.csv"}
                     className="btn btn-primary"
